@@ -7,7 +7,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HelloWorldTest {
-    Map<String, String> params = new HashMap<>();
+    Map<String, Object> params = new HashMap<>();
+
+    /**
+     * 2l_06m CheckType
+     */
+    @Test
+    public void testCheckTypePost(){
+        params.put("param1","value1");
+        params.put("param2","value2");
+
+        Response response = RestAssured
+                .given()
+                .body(params)
+                .post("https://playground.learnqa.ru/api/check_type")
+                .andReturn();
+
+        response.print();
+    }
+    @Test
+    public void testCheckTypeGet(){
+        params.put("param1","value1");
+        params.put("param2","value2");
+
+        Response response = RestAssured
+                .given()
+                .queryParams(params)
+                .get("https://playground.learnqa.ru/api/check_type")
+                .andReturn();
+
+        response.print();
+    }
+
+    /**
+     * 2l_05m JsonPath
+     */
     @Test
     public void testJsonPathNegative(){
         params.put("name", "Mark");
