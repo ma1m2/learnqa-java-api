@@ -7,19 +7,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HelloWorldTest {
-    Map<String, Object> params = new HashMap<>();
+    /**
+     * 2l_07m Status Codes
+     */
+    @Test
+    public void testRedirect(){
+        Response response = RestAssured
+                .given()
+                .redirects()
+                .follow(false) //if true statusCode will be 200
+                .when()
+                .get("https://playground.learnqa.ru/api/get_303")
+                .andReturn();
 
+        int statusCode = response.getStatusCode();
+        System.out.println(statusCode);
+    }
+    @Test
+    public void testStatusCode(){
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/something")
+                .andReturn();
+
+        int statusCode = response.getStatusCode();
+        System.out.println(statusCode);
+    }
     /**
      * 2l_06m CheckType
      */
     @Test
     public void testCheckTypePost(){
-        params.put("param1","value1");
-        params.put("param2","value2");
+        Map<String, Object> body = new HashMap<>();
+        body.put("param1","value1");
+        body.put("param2","value2");
 
         Response response = RestAssured
                 .given()
-                .body(params)
+                .body(body)
                 .post("https://playground.learnqa.ru/api/check_type")
                 .andReturn();
 
@@ -27,6 +51,7 @@ public class HelloWorldTest {
     }
     @Test
     public void testCheckTypeGet(){
+        Map<String, Object> params = new HashMap<>();
         params.put("param1","value1");
         params.put("param2","value2");
 
@@ -44,10 +69,11 @@ public class HelloWorldTest {
      */
     @Test
     public void testJsonPathNegative(){
-        params.put("name", "Mark");
+        Map<String, String> param = new HashMap<>();
+        param.put("name", "Mark");
         JsonPath response = RestAssured
                 .given()
-                .queryParams(params)
+                .queryParams(param)
                 .get("https://playground.learnqa.ru/api/hello")
                 .jsonPath();
 
@@ -60,10 +86,11 @@ public class HelloWorldTest {
     }
     @Test
     public void testJsonPath(){
-        params.put("name", "Mark");
+        Map<String, Object> param = new HashMap<>();
+        param.put("name", "Mark");
         JsonPath response = RestAssured
                 .given()
-                .queryParams(params)
+                .queryParams(param)
                 .get("https://playground.learnqa.ru/api/hello")
                 .jsonPath();
 
@@ -77,10 +104,11 @@ public class HelloWorldTest {
 
     @Test
     public void testGetHello(){
-        params.put("name", "John");
+        Map<String, Object> param = new HashMap<>();
+        param.put("name", "John");
         Response response = RestAssured
                 .given()
-                .queryParams(params)
+                .queryParams(param)
                 .get("https://playground.learnqa.ru/api/hello")
                 //.get("https://playground.learnqa.ru/api/hello?name=Svetlana")
                 .andReturn();
