@@ -1,4 +1,5 @@
 import io.restassured.RestAssured;
+import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HelloWorldTest {
+    /**
+     * 2l_08m Headers and Location
+     */
+    @Test
+    public void testLocationHeader(){
+        Response response = RestAssured
+                .given()
+                .redirects()
+                .follow(false)
+                .when()
+                .get("https://playground.learnqa.ru/api/get_303")
+                .andReturn();
+
+        response.print();
+        String locationHeader = response.header("Location");
+        System.out.println(locationHeader);
+    }
+    @Test
+    public void testHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("myHeader1","myValue1");
+        headers.put("myHeader2","myValue2");
+
+        Response response = RestAssured
+                .given()
+                .headers(headers)
+                .when()
+                .get("https://playground.learnqa.ru/api/show_all_headers")
+                .andReturn();
+
+        response.prettyPrint();//headers in Request
+
+        Headers responseHeader = response.getHeaders();//headers in Response
+        System.out.println(responseHeader);
+    }
     /**
      * 2l_07m Status Codes
      */
