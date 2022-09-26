@@ -9,6 +9,103 @@ import java.util.Map;
 
 public class HelloWorldTest {
     /**
+     * 2l_09m Cookies
+     */
+    @Test
+    public void testCheckCookiesWrongLogin(){
+        Map<String, String> data = new HashMap<>();
+        data.put("login", "secret_login_1");
+        data.put("password", "secret_pass");
+        Response responseForGet = RestAssured
+                .given()
+                .body(data)
+                .when()
+                .post("https://playground.learnqa.ru/api/get_auth_cookie")
+                .andReturn();
+
+        String responseCookie = responseForGet.getCookie("auth_cookie");
+        System.out.println(responseCookie);
+
+        Map<String, String> cookies = new HashMap<>();
+        cookies.put("auth_cookie", responseCookie);
+        Response responseForCheck = RestAssured
+                .given()
+                //.body(data)
+                .cookies(cookies)
+                .when()
+                .post("https://playground.learnqa.ru/api/check_auth_cookie")
+                .andReturn();
+
+        responseForCheck.print();
+    }
+    @Test
+    public void testCheckCookies(){
+        Map<String, String> data = new HashMap<>();
+        data.put("login", "secret_login");
+        data.put("password", "secret_pass");
+        Response responseForGet = RestAssured
+                .given()
+                .body(data)
+                .when()
+                .post("https://playground.learnqa.ru/api/get_auth_cookie")
+                .andReturn();
+
+        String responseCookie = responseForGet.getCookie("auth_cookie");
+        System.out.println(responseCookie);
+
+        Map<String, String> cookies = new HashMap<>();
+        cookies.put("auth_cookie", responseCookie);
+        Response responseForCheck = RestAssured
+                .given()
+                //.body(data)
+                .cookies(cookies)
+                .when()
+                .post("https://playground.learnqa.ru/api/check_auth_cookie")
+                .andReturn();
+
+        responseForCheck.print();
+    }
+    @Test
+    public void testWrongLogin(){
+        Map<String, String> data = new HashMap<>();
+        data.put("login", "secret_login1");
+        data.put("password", "secret_pass");
+        Response response = RestAssured
+                .given()
+                .body(data)
+                .when()
+                .post("https://playground.learnqa.ru/api/get_auth_cookie")
+                .andReturn();
+
+        System.out.println("\nPretty text");
+        response.prettyPrint();
+        System.out.println("\nHeaders");
+        System.out.println(response.getHeaders());
+        System.out.println("\nCookies");
+        System.out.println(response.getCookies());
+        System.out.println(response.getCookie("auth_cookie"));
+    }
+    @Test
+    public void testCookies(){
+        Map<String, String> data = new HashMap<>();
+        data.put("login", "secret_login");
+        data.put("password", "secret_pass");
+        Response response = RestAssured
+                .given()
+                .body(data)
+                .when()
+                .post("https://playground.learnqa.ru/api/get_auth_cookie")
+                .andReturn();
+
+        System.out.println("\nPretty text");
+        response.prettyPrint();
+        System.out.println("\nHeaders");
+        System.out.println(response.getHeaders());
+        System.out.println("\nCookies");
+        System.out.println(response.getCookies());
+        System.out.println(response.getCookie("auth_cookie"));
+    }
+    /**
      * 2l_08m Headers and Location
      */
     @Test
@@ -114,11 +211,12 @@ public class HelloWorldTest {
                 .jsonPath();
 
         String answer2 = response.get("answer2");
-        if(answer2 == null){
-            System.out.println("The key 'answer2' is absent!");
-        }else {
+/*        if(answer2 != null){
             System.out.println(answer2);
-        }
+        }else {
+            System.out.println("The key 'answer2' is absent!");
+        }*/
+        System.out.println(answer2);
     }
     @Test
     public void testJsonPath(){
