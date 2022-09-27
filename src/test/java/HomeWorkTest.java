@@ -1,16 +1,26 @@
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.apache.commons.lang3.ArrayUtils.toArray;
-
 public class HomeWorkTest {
+    /**
+     * Ex6:* Redirect
+     */
+    @Test
+    public void testLongRedirect(){
+        Response response = RestAssured
+                .given()
+                .redirects()
+                .follow(false)
+                .get("https://playground.learnqa.ru/api/long_redirect")
+                .andReturn();
+
+        System.out.println("\n" + response.getHeader("Location"));
+
+    }
     /**
      * Ex5: Parsing JSON, take text of second message
      */
