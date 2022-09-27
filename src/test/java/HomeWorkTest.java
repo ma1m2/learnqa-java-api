@@ -7,6 +7,28 @@ import java.util.List;
 
 public class HomeWorkTest {
     /**
+     * Ex7:* Long Redirect StatusCode 200
+     */
+    @Test
+    public void testLongRedirectStatesCode200(){
+        String url = "https://playground.learnqa.ru/api/long_redirect";
+        int statusCode = 0;
+
+        while (statusCode != 200){
+            Response response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(false)
+                    .get(url)
+                    .andReturn();
+
+            statusCode = response.getStatusCode();
+            System.out.println(response.getHeader("Location") +
+                    " States Code: " +statusCode);
+            url = response.getHeader("Location");
+        }
+    }
+    /**
      * Ex6:* Redirect
      */
     @Test
