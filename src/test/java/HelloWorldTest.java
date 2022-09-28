@@ -3,6 +3,9 @@ import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +13,51 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class HelloWorldTest {
+    /**
+     * 3l_02m Parameterized tests
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {"", "John", "Pete"})
+    public void testHelloParameterizedTest(String name){
+        Map<String, Object> params = new HashMap<>();
+        if(name.length() > 0){
+            params.put("name", name);
+        }
+
+        JsonPath response = RestAssured
+                .given()
+                .queryParams(params)
+                .get("https://playground.learnqa.ru/api/hello")
+                .jsonPath();
+        String answer = response.getString("answer");
+        String expectedName = (name.length() > 0) ? name : "someone";
+        assertEquals("Hello, " + expectedName, answer, "The answer is not expected");
+        response.prettyPrint();
+    }
+    @Test
+    public void testHelloWithOutName(){
+        JsonPath response = RestAssured
+                .get("https://playground.learnqa.ru/api/hello")
+                .andReturn()
+                .jsonPath();
+        String answer = response.getString("answer");
+        assertEquals("Hello, someone", answer, "The answer is not expected");
+        response.prettyPrint();
+    }
+    @Test
+    public void testHelloWithName(){
+        Map<String, Object> param = new HashMap<>();
+        param.put("name", "John");
+        JsonPath response = RestAssured
+                .given()
+                .queryParams(param)
+                .get("https://playground.learnqa.ru/api/hello")
+                .jsonPath();
+        String answer = response.getString("answer");
+        assertEquals("Hello, " + param.get("name"), answer, "The answer is not expected");
+        response.prettyPrint();
+    }
+
     /**
      * 3l_01m JUnit and simple tests
      */
