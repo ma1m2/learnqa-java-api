@@ -3,11 +3,31 @@ import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+
 public class HelloWorldTest {
+    /**
+     * 3l_01m JUnit and simple tests
+     */
+    @Test
+    public void testJUnit200(){
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/map")
+                .andReturn();
+        assertEquals(200, response.getStatusCode(), "Unexpected States Code");
+    }
+    @Test
+    public void testJUnit404(){
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/map2")
+                .andReturn();
+        assertEquals(404, response.getStatusCode(), "Unexpected States Code");
+    }
+
     /**
      * 2l_09m Cookies
      */
