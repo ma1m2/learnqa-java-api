@@ -13,8 +13,23 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Thread.sleep;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HomeWorkTest {
+    /**
+     * Ex11: homework_cookie
+     */
+    //https://playground.learnqa.ru/api/homework_cookie
+    @Test
+    public void testHomeworkCookie(){
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/homework_cookie")
+                .then().log().everything().extract().response();
+
+        System.out.println(response.getCookie("HomeWork"));
+        assertEquals(response.getCookie("HomeWork"), "hw_value", "Unexpected cookie");
+
+    }
     /**
      * Ex10: Short phrase
      */
@@ -52,7 +67,7 @@ public class HomeWorkTest {
         response2.prettyPrint();
 
         //2. make sure that status is "Job is NOT ready"
-        Assertions.assertEquals(statusNotReady, response2.get("status"));
+        assertEquals(statusNotReady, response2.get("status"));
 
         //3. wait specific time
         sleep(1000 * seconds + 1000);
@@ -65,7 +80,7 @@ public class HomeWorkTest {
         response3.prettyPrint();
 
         //4. make sure that status is "Job is ready" and field "result" is present
-        Assertions.assertEquals(statusReady, response3.get("status"));
+        assertEquals(statusReady, response3.get("status"));
         Assertions.assertNotNull(response3.get("result"));
     }
 
