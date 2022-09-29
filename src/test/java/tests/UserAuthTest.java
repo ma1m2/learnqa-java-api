@@ -1,7 +1,7 @@
 package tests;
 
 import io.restassured.RestAssured;
-import io.restassured.http.Headers;
+import lib.MyAssertions;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -20,7 +20,6 @@ public class UserAuthTest extends BaseTestCase {
     /**
      * 3l_05m @BeforeEach
      */
-
     public String cookie;
     public String header;
     public int userIdOnAuth;
@@ -45,16 +44,14 @@ public class UserAuthTest extends BaseTestCase {
 
     @Test
     public void testAuthUser(){
-        JsonPath responseCheckAuth = RestAssured
+        Response responseCheckAuth = RestAssured
                 .given()
                 .header("x-csrf-token", this.header)
                 .cookie("auth_sid", this.cookie)
                 .get("https://playground.learnqa.ru/api/user/auth")
-                .jsonPath();
+                .andReturn();
 
-        responseCheckAuth.prettyPrint();
-        int userIdOnCheck = responseCheckAuth.getInt("user_id");
-        assertEquals(userIdOnAuth, userIdOnCheck, "Unexpected user ID " + userIdOnCheck);
+        MyAssertions.assertJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
     }
 
     @ParameterizedTest
@@ -71,11 +68,7 @@ public class UserAuthTest extends BaseTestCase {
             throw new IllegalArgumentException("Condition value is known: " + condition);
         }
 
-        JsonPath responseForCheck = spec.get().jsonPath();
-        assertEquals(0, responseForCheck.getInt("user_id"), "Urer ID should be 0 for unauth user");
-
-        responseForCheck.prettyPrint();
-
+        Response responseForCheck = spec.get().andReturn();
+        MyAssertions.assertJsonByName(responseForCheck, "user_id", 0);
     }
-
 }

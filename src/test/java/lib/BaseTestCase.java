@@ -6,7 +6,6 @@ import io.restassured.response.Response;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.hasKey;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BaseTestCase {
