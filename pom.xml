@@ -33,6 +33,11 @@
             <artifactId>allure-rest-assured</artifactId>
             <version>2.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>2.2</version>
+        </dependency>
     </dependencies>
 
 </project>
