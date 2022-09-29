@@ -5,6 +5,8 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,14 @@ import java.util.Map;
 import static java.lang.Thread.sleep;
 
 public class HomeWorkTest {
+    /**
+     * Ex10: Short phrase
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {"What is your name?", "My name is Svetlana", "What are you?"})
+    public void testLengthOfString(String str){
+        Assertions.assertTrue(str.length() > 15, "The length of your phrase is less than 16 characters");
+    }
     /**
      * Ex8*: Tokens
      */
