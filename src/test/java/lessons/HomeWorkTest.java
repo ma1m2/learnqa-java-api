@@ -17,6 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HomeWorkTest {
     /**
+     * Ex12 homework_header
+     */
+    @Test
+    public void testHomeworkHeader(){
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/homework_header")
+                .then().log().everything().extract().response();
+
+        assertEquals(response.getHeaders().getValue("x-secret-homework-header"), "Some secret value", "Unexpected header");
+    }
+    /**
      * Ex11: homework_cookie
      */
     //https://playground.learnqa.ru/api/homework_cookie
