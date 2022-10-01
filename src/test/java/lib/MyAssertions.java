@@ -1,6 +1,5 @@
 package lib;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
 
 import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,5 +21,9 @@ public class MyAssertions {
 
     public static void assertResponseStatusCodeEquals(Response response, int expectedStatusCode){
         assertEquals(expectedStatusCode, response.getStatusCode(), "Status code is not as expected");
+    }
+
+    public static void assertJsonHasKey(Response response, String expectedFieldName){
+        response.then().assertThat().body("$", hasKey(expectedFieldName));
     }
 }
