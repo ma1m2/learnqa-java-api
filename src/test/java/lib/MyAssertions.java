@@ -16,6 +16,13 @@ public class MyAssertions {
         assertEquals(expectedValue, actualValue, "JSON actual Value is not equal to expected Value");
     }
 
+    public static void assertJsonByName(Response response, String name, String expectedValue){
+        response.then().assertThat().body("$", hasKey(name));
+
+        String actualValue = response.jsonPath().getString(name);
+        assertEquals(expectedValue, actualValue, "JSON actual Value is not equal to expected Value");
+    }
+
     public static void assertResponseTextEquals(Response response, String expectedAnswer){
         assertEquals(expectedAnswer, response.asString(), "Response text is not as expected");
     }

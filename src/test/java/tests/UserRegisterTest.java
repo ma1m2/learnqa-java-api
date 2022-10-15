@@ -10,19 +10,13 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.hasKey;
-
-
 public class UserRegisterTest extends BaseTestCase {
     @Test
     public void testCreateUserWithExistingEmail(){
         String email = "vinkotov@example.com";
         Map<String,String> userData = new HashMap<>();
         userData.put("email", email);
-        userData.put("password", "123");
-        userData.put("username", "learnqa");
-        userData.put("firstName", "learnqa");
-        userData.put("lastName", "learnqa");
+        userData = DataGenerator.getRegistrationData(userData);
 
         Response response = RestAssured
                 .given()
@@ -35,13 +29,7 @@ public class UserRegisterTest extends BaseTestCase {
 
     @Test
     public void testCreateUserSuccessful(){
-        String email = DataGenerator.getRendomEmail();
-        Map<String,String> userData = new HashMap<>();
-        userData.put("email", email);
-        userData.put("password", "123");
-        userData.put("username", "learnqa");
-        userData.put("firstName", "learnqa");
-        userData.put("lastName", "learnqa");
+        Map<String,String> userData = DataGenerator.getRegistrationData();
 
         Response response = RestAssured
                 .given()
