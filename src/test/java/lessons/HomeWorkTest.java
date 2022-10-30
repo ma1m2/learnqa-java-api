@@ -21,15 +21,65 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HomeWorkTest {
     /**
+     * Ex9*: Selection password
+     */
+    @Test
+    public void testSelectionPassword(){
+        String[] commonPasswords = {"password", "123456", "12345678", "qwerty", "abc123", "monkey", "1234567", "letmein", "trustno1", "dragon"
+                , "baseball", "111111", "iloveyou", "master", "sunshine", "ashley", "bailey", "passw0rd", "shadow", "123123"
+                , "654321", "superman", "qazwsx", "michael", "Football", "password", "welcome", "jesus", "ninja", "mustang"
+                , "password1", "123456789", "adobe123", "admin", "1234567890", "photoshop", "1234", "12345", "princess", "azerty"
+                , "000000", "access", "696969", "batman", "1qaz2wsx", "login", "qwertyuiop", "solo", "starwars", "121212"
+                , "flower", "hottie", "loveme", "zaq1zaq1", "hello", "freedom", "whatever", "666666", "654321", "!@#$%^&*"
+                , "charlie", "aa123456", "donald", "qwerty123", "1q2w3e4r", "555555", "lovely", "7777777", "888888", "123qwe"};
+        String wrong = "You are NOT authorized";
+        String right = "You are authorized";
+        String authCookie;
+        String password;
+
+        Map<String, String> authData = new HashMap<>();
+        authData.put("login","super_admin");
+
+        for (int i=0; i < commonPasswords.length; i++) {
+            password = commonPasswords[i];
+            authData.put("password", password);
+            Response response = RestAssured
+                    .given()
+                    .body(authData)
+                    .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
+                    //.then().log().everything().extract().response();
+                    .andReturn();
+            authCookie = response.cookie("auth_cookie");
+            System.out.println((i + 1) + "   " + authCookie);
+            System.out.println("---------------------------------");
+
+            Response responseAuthCookie = RestAssured
+                    .given()
+                    .cookie(authCookie)
+                    .get("https://playground.learnqa.ru/ajax/api/check_auth_cookie")
+                    //.then().log().everything().extract().response();
+                    .andReturn();
+            System.out.println("String in answer: " + responseAuthCookie.asString());
+
+            if (responseAuthCookie.asString().equals(wrong)) {
+                System.out.println("=======================================");
+            } else {
+                System.out.println("Password: " + password);
+                System.out.println(responseAuthCookie.asString());
+                return;
+            }
+        }
+    }
+    /**
      * Ex13: User Agent
      */
     @ParameterizedTest
     @CsvSource({
             "'Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',Mobile,No,Android",
-            "'Mozilla/5.0 (iPad; CPU OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.77 Mobile/15E148 Safari/604.1',Mobile,Chrome,iOS",
-            "'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',Googlebot,Unknown,Unknown",
+            //"'Mozilla/5.0 (iPad; CPU OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.77 Mobile/15E148 Safari/604.1',Mobile,Chrome,iOS",
+            //"'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',Googlebot,Unknown,Unknown",
             "'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36 Edg/91.0.100.0',Web,Chrome,No",
-            "'Mozilla/5.0 (iPad; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',Mobile,No,iPhone"
+            //"'Mozilla/5.0 (iPad; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',Mobile,No,iPhone"
     })
     public void testUserAgent(String userAgent, String platExp, String browExp, String deviceExp){
         Response response = RestAssured
