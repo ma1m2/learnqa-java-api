@@ -55,7 +55,7 @@ public class HomeWorkTest {
 
             Response responseAuthCookie = RestAssured
                     .given()
-                    .cookie(authCookie)
+                    .cookie("auth_cookie", authCookie)
                     .get("https://playground.learnqa.ru/ajax/api/check_auth_cookie")
                     //.then().log().everything().extract().response();
                     .andReturn();
@@ -65,7 +65,6 @@ public class HomeWorkTest {
                 System.out.println("=======================================");
             } else {
                 System.out.println("Password: " + password);
-                System.out.println(responseAuthCookie.asString());
                 return;
             }
         }
