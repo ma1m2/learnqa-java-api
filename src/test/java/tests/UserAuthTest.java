@@ -6,6 +6,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lib.BaseTestCase;
+import lib.ApiCoreRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,8 +15,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.junit.jupiter.api.DisplayName;
 
+@Epic("Authorisation cases")
+@Feature("Authorisation")
 public class UserAuthTest extends BaseTestCase {
     /**
      * 3l_05m @BeforeEach
@@ -23,6 +29,7 @@ public class UserAuthTest extends BaseTestCase {
     public String cookie;
     public String header;
     public int userIdOnAuth;
+    private final  ApiCoreRequest apiCoreRequest = new ApiCoreRequest();
 
     @BeforeEach
     public void loginUser(){
@@ -30,12 +37,8 @@ public class UserAuthTest extends BaseTestCase {
         authData.put("email", "vinkotov@example.com");
         authData.put("password", "1234");
 
-        Response responseGetAuth = RestAssured
-                .given()
-                .body(authData)
-                .post("https://playground.learnqa.ru/api/user/login")
-                .then().log().everything().extract().response();
-
+        Response responseGetAuth = apiCoreRequest
+                .makePostRequest("https://playground.learnqa.ru/api/user/login", authData);
 
         this.cookie = this.getCookie(responseGetAuth, "auth_sid");
         this.header = this.getHeader(responseGetAuth, "x-csrf-token");
@@ -43,17 +46,21 @@ public class UserAuthTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test successfully authorize user by email and password")
+    @DisplayName("Test positive auth user")
     public void testAuthUser(){
-        Response responseCheckAuth = RestAssured
-                .given()
-                .header("x-csrf-token", this.header)
-                .cookie("auth_sid", this.cookie)
-                .get("https://playground.learnqa.ru/api/user/auth")
-                .andReturn();
+        Response responseCheckAuth = apiCoreRequest
+                .makeGetRequest(
+                        "https://playground.learnqa.ru/api/user/auth",
+                        this.header,
+                        this.cookie
+                );
 
         MyAssertions.assertJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
     }
 
+    @Description("This test check authorisation status without sending auth cookie or token")
+    @DisplayName("Test negative auth user")
     @ParameterizedTest
     @ValueSource(strings = {"cookie", "header"})
     public void testNegativeAuthUser(String condition){
@@ -61,14 +68,16 @@ public class UserAuthTest extends BaseTestCase {
         spec.baseUri("https://playground.learnqa.ru/api/user/auth");
 
         if(condition.equals("cookie")){
-            spec.cookie("auth_sid", this.cookie);
+            Response responseForCheck = apiCoreRequest
+                    .makeGetRequestWithCookie("https://playground.learnqa.ru/api/user/auth", this.cookie);
+            MyAssertions.assertJsonByName(responseForCheck, "user_id", 0);
         } else if (condition.equals("header")) {
-            spec.header("x-csrf-token", this.header);
+            Response responseForCheck = apiCoreRequest
+                    .makeGetRequestWithToken("https://playground.learnqa.ru/api/user/auth",
+                            this.header);
+            MyAssertions.assertJsonByName(responseForCheck, "user_id", 0);
         }else {
-            throw new IllegalArgumentException("Condition value is known: " + condition);
+            throw new  IllegalArgumentException("Condition value is not known: " + condition);
         }
-
-        Response responseForCheck = spec.get().andReturn();
-        MyAssertions.assertJsonByName(responseForCheck, "user_id", 0);
     }
 }
