@@ -20,7 +20,7 @@ import java.util.Map;
 public class UserRegisterTest extends BaseTestCase {
     ApiCoreRequest apiCoreRequest = new ApiCoreRequest();
 
-    @Description("Create user with One Field")
+    @Description("Create user without One Field")
     @DisplayName("Test negative create user")
     @ParameterizedTest
     @ValueSource(strings = {"email", "password", "username", "firstName", "lastName"})
