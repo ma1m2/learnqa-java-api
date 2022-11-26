@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import lib.MyAssertions;
 import io.restassured.path.json.JsonPath;
@@ -15,9 +16,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;
 
 @Epic("Authorisation cases")
@@ -46,6 +44,7 @@ public class UserAuthTest extends BaseTestCase {
     }
 
     @Test
+    @Owner(value = "Пупкин Валерий Иванович")
     @Description("This test successfully authorize user by email and password")
     @DisplayName("Test positive auth user")
     public void testAuthUser(){
@@ -64,8 +63,6 @@ public class UserAuthTest extends BaseTestCase {
     @ParameterizedTest
     @ValueSource(strings = {"cookie", "header"})
     public void testNegativeAuthUser(String condition){
-        RequestSpecification spec = RestAssured.given();
-        spec.baseUri("https://playground.learnqa.ru/api/user/auth");
 
         if(condition.equals("cookie")){
             Response responseForCheck = apiCoreRequest

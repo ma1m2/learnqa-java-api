@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import java.util.Map;
 
 public class ApiCoreRequest {
+    //for class UserAuthTest testAuthUser()
     @Step("Make a Get-request whit token and cookie")
     public Response makeGetRequest(String url, String token, String cookie){
         return given()
@@ -20,6 +21,7 @@ public class ApiCoreRequest {
                 .andReturn();
     }
 
+    //for class UserAuthTest testNegativeAuthUser
     @Step("Make a Get-request whit cookie only")
     public Response makeGetRequestWithCookie(String url, String cookie){
         return given()
@@ -29,6 +31,7 @@ public class ApiCoreRequest {
                 .andReturn();
     }
 
+    //for class UserAuthTest testNegativeAuthUser
     @Step("Make a Get-request whit token only")
     public Response makeGetRequestWithToken(String url, String token){
         return given()
@@ -38,6 +41,7 @@ public class ApiCoreRequest {
                 .andReturn();
     }
 
+    //for class UserAuthTest loginUser()
     @Step("Make a Post-request whit authData")
     public Response makePostRequest(String url, Map<String, String> authData){
         return given()
@@ -46,4 +50,15 @@ public class ApiCoreRequest {
                 .post(url)
                 .andReturn();
     }
+
+    //for class UserRegisterTest testCreateUserSuccessful(), testCreateUserWithExistingEmail()
+    @Step("Mfke a Post-request with userData")
+    public Response makePostRequestUserData(Map<String,String> userData, String url){
+        return given()
+                .filter(new AllureRestAssured())
+                .body(userData)
+                .post(url)
+                .andReturn();
+    }
+
 }
