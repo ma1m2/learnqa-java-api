@@ -18,7 +18,7 @@ import java.util.Map;
 @Epic("Registration user cases")
 @Feature("Registration")
 public class UserRegisterTest extends BaseTestCase {
-    ApiCoreRequest apiCoreRequest = new ApiCoreRequest();
+    private final  ApiCoreRequest apiCoreRequest = new ApiCoreRequest();
 
     @Description("Create user without One Field")
     @DisplayName("Test negative create user")

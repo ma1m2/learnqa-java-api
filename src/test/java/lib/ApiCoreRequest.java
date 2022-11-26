@@ -42,8 +42,8 @@ public class ApiCoreRequest {
     }
 
     //for class UserAuthTest loginUser()
-    @Step("Make a Post-request whit authData")
-    public Response makePostRequest(String url, Map<String, String> authData){
+    @Step("Make a Post-request with authData")
+    public Response makePostRequestAuthData(String url, Map<String, String> authData){
         return given()
                 .filter(new AllureRestAssured())
                 .body(authData)
@@ -51,13 +51,22 @@ public class ApiCoreRequest {
                 .andReturn();
     }
 
-    //for class UserRegisterTest testCreateUserSuccessful(), testCreateUserWithExistingEmail()
-    @Step("Mfke a Post-request with userData")
+    //for class UserRegisterTest for all methods
+    @Step("Make a Post-request with userData")
     public Response makePostRequestUserData(Map<String,String> userData, String url){
         return given()
                 .filter(new AllureRestAssured())
                 .body(userData)
                 .post(url)
+                .andReturn();
+    }
+
+    //for class UserGetTest
+    @Step("Make a Get-request by user ID")
+    public Response makeGetRequestById(String url){
+        return given()
+                .filter(new AllureRestAssured())
+                .get(url)
                 .andReturn();
     }
 

@@ -1,11 +1,8 @@
 package tests;
 
 import io.qameta.allure.*;
-import io.restassured.RestAssured;
 import lib.MyAssertions;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import lib.BaseTestCase;
 import lib.ApiCoreRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +33,7 @@ public class UserAuthTest extends BaseTestCase {
         authData.put("password", "1234");
 
         Response responseGetAuth = apiCoreRequest
-                .makePostRequest("https://playground.learnqa.ru/api/user/login", authData);
+                .makePostRequestAuthData("https://playground.learnqa.ru/api/user/login", authData);
 
         this.cookie = this.getCookie(responseGetAuth, "auth_sid");
         this.header = this.getHeader(responseGetAuth, "x-csrf-token");
