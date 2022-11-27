@@ -24,7 +24,7 @@ public class UserGetTest extends BaseTestCase {
     /**
      * Ex16
      */
-    @Description("This test get user data by id=4 with authorization like user id=2")
+    @Description("This test get user data by id=1 with authorization like user id=2")
     @DisplayName("Test negative get user data")
     @Test
     public void testGetOtherUserDetailAuthUser(){
@@ -67,7 +67,6 @@ public class UserGetTest extends BaseTestCase {
         MyAssertions.assertJsonNotField(response, "lastName");
         MyAssertions.assertJsonNotField(response, "email");
     }
-
     @Description("This test get user data by id=2 with authorization")
     @DisplayName("Test positive get user data")
     @Test

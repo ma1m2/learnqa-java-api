@@ -10,6 +10,18 @@ import io.restassured.response.Response;
 import java.util.Map;
 
 public class ApiCoreRequest {
+    //for class UserEditTest
+    @Step("Make a Put-request")
+    public Response makePutRequest(String token, String cookie, Map<String,String> editData, String url){
+        return given()
+                .filter(new AllureRestAssured())
+                .header(new Header("x-csrf-token", token))
+                .cookie("auth_sid", cookie)
+                .body(editData)
+                .put(url)
+                .andReturn();
+    }
+
     //for class UserAuthTest testAuthUser()
     @Step("Make a Get-request whit token and cookie")
     public Response makeGetRequest(String url, String token, String cookie){
