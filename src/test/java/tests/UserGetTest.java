@@ -17,8 +17,40 @@ import java.util.Map;
 @Epic("Getting user cases")
 @Feature("Get user")
 public class UserGetTest extends BaseTestCase {
+    private String header;
+    private String cookie;
     private final  ApiCoreRequest apiCoreRequest = new ApiCoreRequest();
 
+    /**
+     * Ex16
+     */
+    @Description("This test get user data by id=4 with authorization like user id=2")
+    @DisplayName("Test negative get user data")
+    @Test
+    public void testGetOtherUserDetailAuthUser(){
+        Map<String, String> authData = new HashMap<>();
+        authData.put("email", "vinkotov@example.com");
+        authData.put("password", "1234");
+
+        Response responseGetAuth = apiCoreRequest
+                .makePostRequestAuthData("https://playground.learnqa.ru/api/user/login", authData);
+
+        System.out.println(responseGetAuth.asString());
+        System.out.println("------------------");
+
+        header = getHeader(responseGetAuth, "x-csrf-token");
+        cookie = getCookie(responseGetAuth, "auth_sid");
+
+        Response responseUserData = apiCoreRequest
+                .makeGetRequest("https://playground.learnqa.ru/api/user/1", header, cookie);
+
+        System.out.println(responseUserData.asString());
+
+        MyAssertions.assertJsonHasField(responseUserData, "username");
+        MyAssertions.assertJsonNotField(responseUserData, "firstName");
+        MyAssertions.assertJsonNotField(responseUserData, "lastName");
+        MyAssertions.assertJsonNotField(responseUserData, "email");
+    }
     /**
      * /l4m3-get_user
      */
@@ -50,8 +82,8 @@ public class UserGetTest extends BaseTestCase {
         System.out.println(responseGetAuth.asString());
         System.out.println("------------------");
 
-        String header = getHeader(responseGetAuth, "x-csrf-token");
-        String cookie = getCookie(responseGetAuth, "auth_sid");
+        header = getHeader(responseGetAuth, "x-csrf-token");
+        cookie = getCookie(responseGetAuth, "auth_sid");
 
         Response responseUserData = apiCoreRequest
                 .makeGetRequest("https://playground.learnqa.ru/api/user/2", header, cookie);
