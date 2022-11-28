@@ -10,6 +10,17 @@ import io.restassured.response.Response;
 import java.util.Map;
 
 public class ApiCoreRequest {
+    //for class UserDeleteTest
+    @Step("Make a Delete-request")
+    public Response makeDeleteRequest(String token, String cookie, String userID){
+        return given()
+                .filter(new AllureRestAssured())
+                .header(new Header("x-csrf-token", token))
+                .cookie("auth_sid", cookie)
+                .delete("https://playground.learnqa.ru/api/user/" + userID);
+    }
+
+
     @Step("Make a Put-request no Auth token")
     public Response makePutRequestNoAuth(Map<String,String> editData, String url){
         return given()
