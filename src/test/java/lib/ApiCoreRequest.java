@@ -10,6 +10,14 @@ import io.restassured.response.Response;
 import java.util.Map;
 
 public class ApiCoreRequest {
+    @Step("Make a Put-request no Auth token")
+    public Response makePutRequestNoAuth(Map<String,String> editData, String url){
+        return given()
+                .filter(new AllureRestAssured())
+                .body(editData)
+                .put(url)
+                .andReturn();
+    }
     //for class UserEditTest
     @Step("Make a Put-request")
     public Response makePutRequest(String token, String cookie, Map<String,String> editData, String url){
